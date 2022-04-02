@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
 import { db } from "./Firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 function BudgetCalculatorForm() {
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   //using useState to hold the list of the items
   const [items, setItems] = useState([]);
@@ -22,15 +34,29 @@ function BudgetCalculatorForm() {
 
   return (
     <div className="App">
-      {items.map((item) => {
-        return (
-          <div>
-            <h3>Type: {item.type}</h3>
-            <h3>Name: {item.name}</h3>
-          </div>
-        )
-      })}
+      <Button variant="outlined" color="primary" onClick={handleClickOpen} style={{ marginTop: 80, marginLeft: 50 }}>
+        Budget Calculator
+      </Button>
+
+      {/*using dialog from material ua to show the list of the items in*/}
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth>
+        <tbody>
+          {items.map(item => (
+            <tr>
+              <td>
+                <input type="checkbox" />
+              </td>
+              <td>{item.type}</td>
+              <td>{item.name}</td>
+              <td>{item.lowPrice}</td>
+              <td>{item.highPrice}</td>
+
+            </tr>
+          ))}
+        </tbody>
+      </Dialog>
     </div>
+
   );
 }
 
